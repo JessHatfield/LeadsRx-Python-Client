@@ -50,14 +50,20 @@ logging.basicConfig(level=logging.INFO,
 ```
 Authenticate And Create Client
 ```python
-#read in client_id
+#read in client_scret and account tag from a json file 
 json_file=open('auth.json')
 auth_dict=json.load(json_file)
 
 ##create client -- must pass in secret key and account tag as strings
 secret_key=auth_dict['secret_key']
 account_tag=auth_dict['account_tag']
+
 client = LeadRx.client(secret_key=secret_key, account_tag=account_tag)
+
+
+#You could also just passing the key and tag in directly. Using a file is preferable as this way no sensitive information ends up in our gitrepo
+client = LeadRx.client(secret_key="Your Client Secret", account_tag="Your Account Tag")
+
 ```
 
 Accessing The Conversion ID Endpoint
