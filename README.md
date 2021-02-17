@@ -22,6 +22,16 @@ https://developers.leadsrx.com/reference#conversions
 Access Results As A Json Object ([{},{},{}]
 Access Results As A Pandas Dataframe
 
+
+## Getting Started
+
+### Installation
+Download Files As Zip
+
+Install These Libraries
+* Requests
+* Pandas
+
 ## Code Examples
 
 Import Required Libraries
