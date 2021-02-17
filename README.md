@@ -61,7 +61,7 @@ account_tag=auth_dict['account_tag']
 client = LeadRx.client(secret_key=secret_key, account_tag=account_tag)
 
 
-#You could also just passing the key and tag in directly. Using a file is preferable as this way no sensitive information ends up in our gitrepo
+#You could also just pass the key and tag in directly. Using a file is preferable as this way no sensitive information ends up in our gitrepo
 client = LeadRx.client(secret_key="Your Client Secret", account_tag="Your Account Tag")
 
 ```
