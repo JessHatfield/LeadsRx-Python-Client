@@ -4,6 +4,16 @@ A python client for querying the LeadRX API
 
 https://developers.leadsrx.com/reference#conversions
 
+Written by Josh Hatfield @Semetrical
+
+Initially created in my spare time to help out our analytics team.
+
+Semetrical are a global top 40 digital agency offering a full suite of services. Bespoke technology forms a key part of what we do.
+
+We won Best Small SEO Agency at the EU Search Awards in 2019 and Best Small Biddable Agency at the UK Search Awards 2020
+
+Our website can be found [here](http://bit.ly/3aMWIMd). If you want to chat, get in touch [here](http://bit.ly/3keCf5Y)
+
 ## Key Features
 
 
@@ -19,8 +29,8 @@ https://developers.leadsrx.com/reference#conversions
 
 ### Access Results In These Formats
 
-Access Results As A Json Object ([{},{},{}]
-Access Results As A Pandas Dataframe
+* Access Results As A Json Object ([{},{},{}])
+* Access Results As A Pandas Dataframe
 
 
 ## Getting Started
