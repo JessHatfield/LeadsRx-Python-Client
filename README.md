@@ -7,7 +7,6 @@ https://developers.leadsrx.com/reference#conversions
 
 #### Written by Josh Hatfield @Semetrical
 
-Initially
 
 #### About Semetrical
 
