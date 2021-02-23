@@ -1,4 +1,4 @@
-# LeadRX-Python-Client
+# LeadRX Python Client
 
 A python client for querying the LeadRX API. Created in my spare time to help out our analytics team.
 
