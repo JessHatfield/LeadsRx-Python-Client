@@ -1,6 +1,6 @@
-# LeadRX Python Client
+# LeadsRX Python Client
 
-A python client for querying the LeadRX API. Created in my spare time to help out our analytics team.
+A python client for querying the LeadsRX API. Created in my spare time to help out our analytics team.
 
 https://developers.leadsrx.com/reference#conversions
 
