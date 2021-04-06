@@ -88,6 +88,15 @@ class InteractionsResultTest(unittest.TestCase):
         except AssertionError as e:
             raise self.failureException(msg) from e
 
+    def test_no_results(self):
+
+        single_result={'status': '0', 'message': 'ok', 'results': {'totalInteractions': 0, 'byDay': {'2021-01-01': 0}, 'byDOW': [], 'byHour': []}}
+
+        result=InteractionResult(single_result,campaign_id="123")
+
+        self.assertEqual(result.by_day_results_json,[{'Date':'2021-01-01','Interactions':0,'CampaignID':'123'}])
+
+
     def test_extract_single_result_json_and_dataframe(self):
         self.addTypeEqualityFunc(DataFrame, self.assertDataframeEqual)
         single_result = {

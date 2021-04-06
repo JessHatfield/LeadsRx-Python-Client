@@ -259,12 +259,19 @@ class InteractionResult:
     def __gen_flattened_json(self, raw_json, campaign_id):
         results = raw_json['results']
 
-        for key, value in results['byDay'].items():
-            self.__by_day_results_flattend_json.append({'Date': key, 'Interactions': value, 'CampaignID': campaign_id})
+        if type(results['byDay']) == dict:
+            for key, value in results['byDay'].items():
+                self.__by_day_results_flattend_json.append({'Date': key, 'Interactions': value, 'CampaignID': campaign_id})
 
-        for key, value in results['byDOW'].items():
-            self.__by_day_of_week_results_flattened_json.append(
-                {'Day_Of_Week': key, 'Interactions': value, 'CampaignID': campaign_id})
+        else:
+            self.__by_day_results_flattend_json.append([])
+
+        if type(results['byDOW']) == dict:
+            for key, value in results['byDOW'].items():
+                self.__by_day_of_week_results_flattened_json.append(
+                    {'Day_Of_Week': key, 'Interactions': value, 'CampaignID': campaign_id})
+        else:
+            self.__by_day_of_week_results_flattened_json.append([])
 
         for count,value in enumerate(results['byHour']):
             self.__by_hour_results_flattened_json.append(
