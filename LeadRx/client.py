@@ -264,7 +264,7 @@ class InteractionResult:
                 self.__by_day_results_flattend_json.append({'Date': key, 'Interactions': value, 'CampaignID': campaign_id})
 
         else:
-            self.__by_day_results_flattend_json.append([])
+            self.__by_day_results_flattend_json.append([{'Date':'','Interactions':'','CampaignID':''}])
 
         if type(results['byDOW']) == dict:
             for key, value in results['byDOW'].items():
@@ -291,7 +291,7 @@ class InteractionResult:
 
     @property
     def by_day_results_dataframe(self):
-        return DataFrame(self.__by_day_of_week_results_flattened_json)
+        return DataFrame(self.__by_day_results_flattend_json)
 
     @property
     def day_of_week_dataframe(self):
