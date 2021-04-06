@@ -6,6 +6,53 @@ import copy
 from pandas import DataFrame
 
 
+class AttributionResult:
+
+    def __init__(self,non_conversion_json):
+        __non_conversion_json=copy.deepcopy(non_conversion_json)
+        self.__flattened_json = self.__gen_flattened_json(__non_conversion_json)
+
+    def __gen_flattened_json(self,json_input):
+        output_list=[]
+        for item in json_input['results']:
+
+            item['Campaign_ID']=item.pop('id')
+            item['Conversion_Total']=item.pop('count')
+            item['Conversion_Value']=item.pop('value')
+            item['Conversion_Cost']=item.pop('cost')
+            output_list.append(item)
+
+        return output_list
+
+    @property
+    def dataframe(self):
+        return DataFrame(self.__flattened_json)
+
+    @property
+    def json(self):
+        return self.__flattened_json
+
+
+
+class NonConversionResult:
+
+    def __init__(self,non_conversion_json):
+        __non_conversion_json=copy.deepcopy(non_conversion_json)
+        self.__flattened_json = self.__gen_flattened_json(__non_conversion_json)
+
+    def __gen_flattened_json(self,json_input):
+
+        return json_input
+
+    @property
+    def dataframe(self):
+        return DataFrame(self.__flattened_json)
+
+    @property
+    def json(self):
+        return self.__flattened_json
+
+
 class ConversionResult:
 
     def __init__(self, conversion_json):
@@ -261,10 +308,11 @@ def handle_response_status(result_json):
     # {status:3,message:'Missing required data fields'}
     # {status:10,message:'Account credentials did not validate}
 
+    valid_success_messages=['ok','success']
     status = result_json['status']
-    message = result_json['message']
+    message = result_json['message'].lower()
 
-    if int(status) == 0 and message == "ok":
+    if int(status) == 0 and message in valid_success_messages:
         return True
 
     else:
@@ -277,6 +325,22 @@ class client:
         self.__secret_key = secret_key
         self.__account_tag = account_tag
         self.__get_request = web_request.requestMachine(web_request.getRequest)
+
+    def pull_attribution(self,aModel:str,startDateTimeStr:str,endDateTimeStr:str,conversion_id="*",lead_type="all"):
+
+        querystring = {"aModel": aModel, "startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
+                       "conversionID": conversion_id, "acctTag": self.__account_tag,
+                       "apiSecret": self.__secret_key,'leadType':lead_type}
+
+        result_json = self.__get_request.send_request(base_url='https://api.leadsrx.com/v1/',
+                                                      resource_uri='attribution.php',
+                                                      url_params=querystring)
+
+        handle_response_status(result_json)
+
+        results_object = AttributionResult(result_json)
+        return results_object
+
 
     def pull_interactions(self, campaignID: str, startDateTimeStr: str, endDateTimeStr: str, conversion_id="*", ):
         querystring = {"campaignID": campaignID, "startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
@@ -322,6 +386,21 @@ class client:
         handle_response_status(result_json)
         results_object = DomainResults(conversion_id_json=result_json)
         return results_object
+
+    def pull_non_conversions(self,startDateTimeStr: str, endDateTimeStr: str):
+
+        querystring = {"startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
+                       "acctTag": self.__account_tag, "apiSecret": self.__secret_key,
+                        "includePages":"yes"}
+
+        result_json = self.__get_request.send_request(base_url='https://api.leadsrx.com/v1/',
+                                                      resource_uri='non-conversions.php',
+                                                      url_params=querystring)
+
+        handle_response_status(result_json)
+        results_object= NonConversionResult(non_conversion_json=result_json)
+        return results_object
+
 
     def pull_conversions(self, startDateTimeStr: str, endDateTimeStr: str, conversion_id="*", landingPage="yes",
                          visitorID=None):

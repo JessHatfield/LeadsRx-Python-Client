@@ -1,6 +1,6 @@
 import unittest
 from LeadRx.client import ConversionResult, ConversionIDResult, TouchPointResult, handle_response_status, \
-    LeadRXRequestError, DomainResults, GroupingsResult, InteractionResult
+    LeadRXRequestError, DomainResults, GroupingsResult, InteractionResult, AttributionResult
 from pandas import DataFrame
 import pandas.testing as pd_testing
 
@@ -116,7 +116,7 @@ class InteractionsResultTest(unittest.TestCase):
                     "Wednesday": 1,
                     "Thursday": 2
                 },
-                "byHour": [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+                "byHour": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
             }
         }
 
@@ -165,8 +165,6 @@ class InteractionsResultTest(unittest.TestCase):
                             {'Hour_Of_Day': 21, 'Interactions': 21, 'CampaignID': '123'},
                             {'Hour_Of_Day': 22, 'Interactions': 22, 'CampaignID': '123'},
                             {'Hour_Of_Day': 23, 'Interactions': 23, 'CampaignID': '123'},
-
-
 
                             ]
         results_object = InteractionResult(single_result, campaign_id='123')
@@ -224,6 +222,35 @@ class TouchPointResultTest(unittest.TestCase):
         self.assertEqual(results_object.by_day_results_dataframe, DataFrame(expected_by_day))
         self.assertEqual(by_total, expected_by_total)
         self.assertEqual(results_object.total_results_dataframe, DataFrame(expected_by_total))
+
+
+class AttributionResultTests(unittest.TestCase):
+
+    def assertDataframeEqual(self, a, b, msg):
+        try:
+            ##ignores order of column and rows
+            pd_testing.assert_frame_equal(a, b, check_like=True, check_dtype=False, check_exact=False)
+        except AssertionError as e:
+            raise self.failureException(msg) from e
+
+    def test_extract_two_results_json_and_dataframe(self):
+
+        self.addTypeEqualityFunc(DataFrame, self.assertDataframeEqual)
+        api_response = {'status': '0', 'results': [{'id': '555986', 'count': 22.42, 'value': 519.55, 'cost': 154.12},
+                                                   {'id': '554588', 'count': 18, 'value': 479.7, 'cost': 0}],
+                        'resultCount': 2, 'totalConversions': 40.42, 'totalValue': 999.25, 'message': 'ok'}
+        result_object = AttributionResult(api_response)
+
+        result_json = result_object.json
+        expected_json = [
+            {'Campaign_ID': '555986', 'Conversion_Total': 22.42, 'Conversion_Value': 519.55, 'Conversion_Cost': 154.12},
+            {'Campaign_ID': '554588', 'Conversion_Total': 18, 'Conversion_Value': 479.7, 'Conversion_Cost': 0}]
+
+        self.assertEqual(result_json, expected_json)
+
+        self.assertEqual(result_object.dataframe,DataFrame(expected_json))
+
+
 
 
 class ConversionResultTests(unittest.TestCase):

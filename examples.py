@@ -2,22 +2,32 @@ import LeadRx
 import logging
 import json
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.StreamHandler()
-    ]
-)
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s [%(levelname)s] %(message)s",
+                    handlers=[
+                        logging.StreamHandler()
+                    ]
+                    )
 
+# read in client_id
 
-
-#read in client_id
-
-
+json_file = open('auth.json')
+auth_dict = json.load(json_file)
 
 ##create client -- must pass in secret key and account tag as strings
-client = LeadRx.client(secret_key="", account_tag="lwnjff41950")
+secret_key = auth_dict['secret_key']
+account_tag = auth_dict['account_tag']
+client = LeadRx.client(secret_key=secret_key, account_tag=account_tag)
+
+attributions = client.pull_attribution(aModel="special", startDateTimeStr="2021-01-01 00:0:00",
+                                       endDateTimeStr="2021-01-01 06:00:00")
+
+results = attributions.json
+df_results = attributions.dataframe
+
+non_conversions = client.pull_non_conversions(startDateTimeStr="2021-01-01 00:0:00",
+                                              endDateTimeStr="2021-01-01 06:00:00")
+results = non_conversions.json
 
 # get contents of conversion ID endpoint for the account tag https://developers.leadsrx.com/reference#conversion-ids
 conversion_ids = client.pull_conversion_ids()
@@ -49,8 +59,8 @@ groupings = groupings.json
 # get contents of touchpoint endpoint for the account tag with a given startDateTime and endDateTime https://developers.leadsrx.com/reference#touchpoints
 # conversionID to use can be set by passing the conversionID for desired conversion as a str. Function pulls results for all conversions by default
 # leadType can be set to "new","repeat" or "all". This filters touchpoint results based on first time,repeat or all conversions for a customer
-touchpoints = client.pull_touchpoints(campaignID="554588", startDateTimeStr="2021-01 00:00:00",
-                                      endDateTimeStr="2021-01-01 11:00:00", conversion_id='13697', lead_type="new")
+touchpoints = client.pull_touchpoints(campaignID="554589", startDateTimeStr="2021-01 00:00:00",
+                                      endDateTimeStr="2021-01-01 12:00:00", conversion_id='13697', lead_type="new")
 # get result for entire time period as json
 touchpoints_json = touchpoints.total_results_json
 # get result for entire time period as dataframe
@@ -62,7 +72,7 @@ touchpoints_dataframe = touchpoints.by_day_results_dataframe
 
 # get contents of interactions endpoing for the account tag with a given startDateTime and endDateTime https://developers.leadsrx.com/reference#interactions
 # campaignID should be supplied as a string. Campaign ID is the ID of the touchpoint you want to query
-interactions = client.pull_interactions(campaignID="554588", startDateTimeStr="2021-01 00:00:00",
+interactions = client.pull_interactions(campaignID="554589", startDateTimeStr="2021-01 00:00:00",
                                         endDateTimeStr="2021-01-01 11:00:00")
 interactions_by_date_json = interactions.by_day_results_json
 interactions_by_hour_of_day_json = interactions.hour_of_day_json
