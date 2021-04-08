@@ -333,11 +333,13 @@ class client:
         self.__account_tag = account_tag
         self.__get_request = web_request.requestMachine(web_request.getRequest)
 
-    def pull_attribution(self,aModel:str,startDateTimeStr:str,endDateTimeStr:str,conversion_id="*",lead_type="all"):
+    def pull_attribution(self,aModel:str,startDateTimeStr:str,endDateTimeStr:str,conversion_id="*",lead_type="all",usePacific=1):
 
+        # setting usePacfic to 1 will force the api to return results in the pacific timeZone for startDateTime and endDatetime
+        # otherwise these values will reflect the local timezones of visitors (who wants that..?)
         querystring = {"aModel": aModel, "startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
                        "conversionID": conversion_id, "acctTag": self.__account_tag,
-                       "apiSecret": self.__secret_key,'leadType':lead_type}
+                       "apiSecret": self.__secret_key,'leadType':lead_type,"usePacific":usePacific}
 
         result_json = self.__get_request.send_request(base_url='https://api.leadsrx.com/v1/',
                                                       resource_uri='attribution.php',
@@ -349,10 +351,14 @@ class client:
         return results_object
 
 
-    def pull_interactions(self, campaignID: str, startDateTimeStr: str, endDateTimeStr: str, conversion_id="*", ):
+    def pull_interactions(self, campaignID: str, startDateTimeStr: str, endDateTimeStr: str, conversion_id="*",usePacific=1):
+
+        # setting usePacfic to 1 will force the api to return results in the pacific timeZone for startDateTime and endDatetime
+        # otherwise these values will reflect the local timezones of visitors (who wants that..?)
         querystring = {"campaignID": campaignID, "startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
                        "conversionID": conversion_id, "acctTag": self.__account_tag,
-                       "apiSecret": self.__secret_key}
+                       "apiSecret": self.__secret_key,"usePacific":usePacific}
+
 
         result_json = self.__get_request.send_request(base_url='https://api.leadsrx.com/v1/',
                                                       resource_uri='interactions.php',
@@ -394,11 +400,13 @@ class client:
         results_object = DomainResults(conversion_id_json=result_json)
         return results_object
 
-    def pull_non_conversions(self,startDateTimeStr: str, endDateTimeStr: str):
+    def pull_non_conversions(self,startDateTimeStr: str, endDateTimeStr: str,usePacific=1):
 
+        # setting usePacfic to 1 will force the api to return results in the pacific timeZone for startDateTime and endDatetime
+        # otherwise these values will reflect the local timezones of visitors (who wants that..?)
         querystring = {"startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
                        "acctTag": self.__account_tag, "apiSecret": self.__secret_key,
-                        "includePages":"yes"}
+                        "includePages":"yes","usePacific":usePacific}
 
         result_json = self.__get_request.send_request(base_url='https://api.leadsrx.com/v1/',
                                                       resource_uri='non-conversions.php',
@@ -410,11 +418,13 @@ class client:
 
 
     def pull_conversions(self, startDateTimeStr: str, endDateTimeStr: str, conversion_id="*", landingPage="yes",
-                         visitorID=None):
+                         visitorID=None,usePacific=1):
 
+        #setting usePacfic to 1 will force the api to return results in the pacific timeZone for startDateTime and endDatetime
+        #otherwise these values will reflect the local timezones of visitors (who wants that..?)
         querystring = {"startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
                        "conversionID": conversion_id, "acctTag": self.__account_tag, "apiSecret": self.__secret_key,
-                       "landingPage": landingPage}
+                       "landingPage": landingPage,'usePacific':usePacific}
 
         if visitorID is not None:
             querystring['visitorID'] = visitorID
@@ -429,16 +439,18 @@ class client:
         return results_object
 
     def pull_touchpoints(self, campaignID, startDateTimeStr: str, endDateTimeStr: str, conversion_id="*",
-                         lead_type="all"):
+                         lead_type="all",usePacific=1):
         valid_lead_types = ["new", "repeat", "all"]
 
         if lead_type.lower() not in valid_lead_types:
             raise TypeError(
                 f'lead_type value "{lead_type}" is not a valid lead_type. Valid lead types are {valid_lead_types}')
 
+        # setting usePacfic to 1 will force the api to return results in the pacific timeZone for startDateTime and endDatetime
+        # otherwise these values will reflect the local timezones of visitors (who wants that..?)
         querystring = {"campaignID": campaignID, "startDateTime": startDateTimeStr, "endDateTime": endDateTimeStr,
                        "conversionID": conversion_id, "leadType": lead_type, "acctTag": self.__account_tag,
-                       "apiSecret": self.__secret_key}
+                       "apiSecret": self.__secret_key,"usePacific":usePacific}
 
         result_json = self.__get_request.send_request(base_url='https://api.leadsrx.com/v1/',
                                                       resource_uri='touchpoints.php',

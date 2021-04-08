@@ -1,3 +1,4 @@
+import copy
 import json
 import logging
 import requests as re
@@ -32,9 +33,13 @@ class getRequest(_requestTypeInterface):
             raise TypeError("resource_uri is None")
 
         endpoint = base_url + resource_uri
-        logging.info(f'Sending Get Request To {endpoint} With Parameters {url_params}')
+        url_params_to_print=copy.deepcopy(url_params)
+        url_params_to_print.pop('apiSecret')
+
+        logging.info(f'Sending Get Request To {endpoint} With Parameters {url_params_to_print}')
         r = re.get(endpoint, headers=url_headers, params=url_params)
         requestResponseHandler.handle_response(r)
+        requestResponseHandler.handle_leadsRX_error_messages(r)
         return json.loads(r.text)
 
 
@@ -46,3 +51,9 @@ class requestResponseHandler:
             pass
         else:
             raise response_obj.raise_for_status()
+
+    @staticmethod
+    def handle_leadsRX_error_messages(response_obj):
+        if response_obj.text == "We apologize, but there\'s been a system error.  Tech support has been notified.":
+            response_obj.status_code=500
+            raise re.HTTPError("We apologize, but there\'s been a system error.  Tech support has been notified.",response=response_obj)
