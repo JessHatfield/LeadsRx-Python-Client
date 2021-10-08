@@ -31,18 +31,19 @@ Our website can be found [here](http://bit.ly/3aMWIMd). If you want to chat, get
 
 ### Access Results In These Formats
 
-* Access Results As A Json Object ([{},{},{}])
+* Access Results As A List Of Dictionaries ([{},{},{}])
 * Access Results As A Pandas Dataframe
 
 
 ## Getting Started
 
 ### Installation
-Download Files As Zip
 
-Install These Libraries
-* Requests
-* Pandas
+Install via Pip
+
+```console
+pip install LeadsRx-Python-Client
+```
 
 ## Code Examples
 
