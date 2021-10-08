@@ -1,5 +1,5 @@
 import unittest
-from LeadRx.client import ConversionResult, ConversionIDResult, TouchPointResult, handle_response_status, \
+from src.LeadsRx.client import ConversionResult, ConversionIDResult, TouchPointResult, handle_response_status, \
     LeadRXRequestError, DomainResults, GroupingsResult, InteractionResult, AttributionResult
 from pandas import DataFrame
 import pandas.testing as pd_testing

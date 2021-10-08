@@ -1,4 +1,4 @@
-import LeadRx
+import src.LeadsRx as LeadsRx
 import logging
 import json
 
@@ -17,7 +17,18 @@ auth_dict = json.load(json_file)
 ##create client -- must pass in secret key and account tag as strings
 secret_key = auth_dict['secret_key']
 account_tag = auth_dict['account_tag']
-client = LeadRx.client(secret_key=secret_key, account_tag=account_tag)
+client = LeadsRx.client(secret_key=secret_key, account_tag=account_tag)
+
+
+
+interactions = client.pull_interactions(campaignID="563871", startDateTimeStr="2021-04-11 00:00:00",
+                                        endDateTimeStr="2021-04-11 23:59:59")
+interactions_by_date_json = interactions.by_day_results_json
+
+
+#get contents of attribution endpoint for the account tag specific in client
+attributions = client.pull_attribution(aModel="special", startDateTimeStr="2021-04-11 00:0:00",
+                                       endDateTimeStr="2021-04-11 23:59:59")
 
 
 # get contents of conversion ID endpoint for the account tag https://developers.leadsrx.com/reference#conversion-ids

@@ -48,7 +48,7 @@ Install These Libraries
 
 Import Required Libraries
 ```python
-import LeadRx
+import LeadsRx
 import logging
 import json
 

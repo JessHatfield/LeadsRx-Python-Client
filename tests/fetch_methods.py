@@ -1,5 +1,5 @@
 import unittest
-from LeadRx.client import client as LeadRXClient
+from src.LeadsRx.client import client as LeadRXClient
 import httpretty
 import json
 from re import compile

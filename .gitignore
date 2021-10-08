@@ -1,1 +1,4 @@
-LeadRx/setup.py
+LeadsRx/setup.py
+/dist
+/src/LeadsRx_Python_Client.egg-info
+/Packaging Instructions
