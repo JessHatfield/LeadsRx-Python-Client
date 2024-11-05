@@ -5,7 +5,7 @@ A python client for querying the LeadsRX API. Created in my spare time to help o
 https://developers.leadsrx.com/reference#conversions
 
 
-#### Written by Josh Hatfield @Semetrical
+#### Written by Jess Hatfield @Semetrical
 
 
 #### About Semetrical
